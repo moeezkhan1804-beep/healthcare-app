@@ -50,7 +50,7 @@ const BookAppointment = () => {
         doctorId: id,
         ...formData
       });
-      setSuccess('Appointment booked successfully!');
+      setSuccess('🎉 Appointment booked successfully!');
       setTimeout(() => navigate('/patient-dashboard'), 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'Booking failed');
@@ -59,79 +59,135 @@ const BookAppointment = () => {
     }
   };
 
-  if (loading) return <p className="p-6 text-gray-500">Loading...</p>;
+  const timeSlots = [
+    '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+    '12:00', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
+  ];
+
+  if (loading) return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="text-5xl mb-4">⏳</div>
+        <p className="text-gray-500">Loading doctor info...</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">
-          Book Appointment 📅
-        </h1>
+    <div className="min-h-screen bg-gray-50">
 
-        {/* Doctor Info */}
+      {/* Header */}
+      <div className="bg-gradient-to-br from-blue-600 to-blue-800 text-white px-6 py-10">
+        <div className="max-w-3xl mx-auto">
+          <button
+            onClick={() => navigate('/doctors')}
+            className="text-blue-200 hover:text-white text-sm mb-4 flex items-center gap-1 transition"
+          >
+            ← Back to Doctors
+          </button>
+          <h1 className="text-3xl font-bold">Book Appointment 📅</h1>
+          <p className="text-blue-200 mt-1">Fill in the details to confirm your appointment</p>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-6 py-8">
+
+        {/* Doctor Card */}
         {doctor && (
-          <div className="bg-white p-6 rounded-xl shadow mb-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-blue-100 text-blue-600 rounded-full w-14 h-14 flex items-center justify-center text-2xl">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-5 flex items-center gap-4">
+              <div className="bg-blue-600 text-white w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm">
                 👨‍⚕️
               </div>
-              <div>
-                <p className="font-semibold text-gray-800 text-lg">
+              <div className="flex-1">
+                <p className="font-bold text-gray-800 text-xl">
                   Dr. {doctor.userId?.name}
                 </p>
-                <p className="text-blue-600 text-sm">
+                <p className="text-blue-600 font-medium">
                   {doctor.specialization}
                 </p>
-                <p className="text-gray-600 text-sm">
-                  💰 Fees: ₹{doctor.fees}
-                </p>
               </div>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-gray-800">₹{doctor.fees}</p>
+                <p className="text-gray-500 text-sm">Consultation fee</p>
+              </div>
+            </div>
+            <div className="px-6 py-4 flex gap-6">
+              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                🎓 <span>{doctor.experience} years experience</span>
+              </div>
+              {doctor.address && (
+                <div className="flex items-center gap-2 text-gray-500 text-sm">
+                  📍 <span>{doctor.address}</span>
+                </div>
+              )}
             </div>
           </div>
         )}
 
         {/* Booking Form */}
-        <div className="bg-white p-6 rounded-xl shadow">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">
+            Appointment Details
+          </h2>
+
           {error && (
-            <div className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="bg-green-100 text-green-600 p-3 rounded mb-4 text-sm">
-              {success}
+            <div className="bg-red-50 border border-red-200 text-red-600 p-4 rounded-xl mb-6 text-sm flex items-center gap-2">
+              <span>⚠️</span> {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-600 p-4 rounded-xl mb-6 text-sm flex items-center gap-2">
+              <span>✅</span> {success}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+
+            {/* Date */}
             <div>
-              <label className="block text-gray-700 mb-1">Date</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                📅 Select Date
+              </label>
               <input
                 type="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
                 min={new Date().toISOString().split('T')[0]}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 required
               />
             </div>
 
+            {/* Time Slots */}
             <div>
-              <label className="block text-gray-700 mb-1">Time</label>
-              <input
-                type="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
-                required
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                ⏰ Select Time Slot
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {timeSlots.map((time) => (
+                  <button
+                    key={time}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, time })}
+                    className={`py-2.5 rounded-xl text-sm font-medium transition ${
+                      formData.time === time
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-blue-600 border border-gray-200'
+                    }`}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
             </div>
 
+            {/* Problem */}
             <div>
-              <label className="block text-gray-700 mb-1">
-                Describe your problem
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                🩺 Describe your problem
               </label>
               <textarea
                 name="problem"
@@ -139,16 +195,30 @@ const BookAppointment = () => {
                 onChange={handleChange}
                 placeholder="Describe your symptoms or reason for visit..."
                 rows={4}
-                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
               />
             </div>
 
+            {/* Summary */}
+            {formData.date && formData.time && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <p className="text-blue-800 font-medium text-sm mb-2">
+                  📋 Appointment Summary
+                </p>
+                <div className="flex gap-4 text-sm text-blue-700">
+                  <span>📅 {formData.date}</span>
+                  <span>⏰ {formData.time}</span>
+                  <span>💰 ₹{doctor?.fees}</span>
+                </div>
+              </div>
+            )}
+
             <button
               type="submit"
-              disabled={submitting}
-              className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 font-semibold"
+              disabled={submitting || !formData.date || !formData.time}
+              className="bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 font-semibold transition shadow-sm disabled:opacity-50 disabled:cursor-not-allowed text-lg"
             >
-              {submitting ? 'Booking...' : 'Confirm Appointment'}
+              {submitting ? '⏳ Booking...' : '✅ Confirm Appointment'}
             </button>
           </form>
         </div>
