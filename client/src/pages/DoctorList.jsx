@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -130,7 +130,7 @@ const DoctorList = () => {
                   </div>
                   <div>
                     <p className="font-bold text-gray-800 text-lg">
-                      Dr. {doctor.userId?.name}
+                      {doctor.userId?.name}
                     </p>
                     <p className="text-blue-600 text-sm font-medium">
                       {doctor.specialization}
@@ -168,19 +168,19 @@ const DoctorList = () => {
                   )}
 
                   <div className="flex gap-2">
-  <button
-    onClick={() => navigate(`/doctors/${doctor._id}`)}
-    className="flex-1 border-2 border-blue-600 text-blue-600 py-3 rounded-xl hover:bg-blue-50 transition font-semibold"
-  >
-    View Profile
-  </button>
-  <button
-    onClick={() => handleBooking(doctor._id)}
-    className="flex-1 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition font-semibold shadow-sm"
-  >
-    Book →
-  </button>
-</div>
+                    <button
+                      onClick={() => navigate(`/doctors/${doctor._id}`)}
+                      className="flex-1 border-2 border-blue-600 text-blue-600 py-3 rounded-xl hover:bg-blue-50 transition font-semibold"
+                    >
+                      View Profile
+                    </button>
+                    <button
+                      onClick={() => handleBooking(doctor._id)}
+                      className="flex-1 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition font-semibold shadow-sm"
+                    >
+                      Book →
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
