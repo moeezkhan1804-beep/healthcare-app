@@ -167,12 +167,20 @@ const DoctorList = () => {
                     </p>
                   )}
 
-                  <button
-                    onClick={() => handleBooking(doctor._id)}
-                    className="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition font-semibold shadow-sm"
-                  >
-                    Book Appointment →
-                  </button>
+                  <div className="flex gap-2">
+  <button
+    onClick={() => navigate(`/doctors/${doctor._id}`)}
+    className="flex-1 border-2 border-blue-600 text-blue-600 py-3 rounded-xl hover:bg-blue-50 transition font-semibold"
+  >
+    View Profile
+  </button>
+  <button
+    onClick={() => handleBooking(doctor._id)}
+    className="flex-1 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition font-semibold shadow-sm"
+  >
+    Book →
+  </button>
+</div>
                 </div>
               </div>
             ))}
